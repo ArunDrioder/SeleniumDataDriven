@@ -1,7 +1,9 @@
 package tests;
 
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.util.NumberToTextConverter;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.testng.annotations.Test;
@@ -51,7 +53,18 @@ public class DataDriven {
                     if (row.getCell(column).getStringCellValue().equalsIgnoreCase(testCaseName)) {
                         Iterator<Cell> cv = row.cellIterator();
                         while (cv.hasNext()) {
-                            a.add(cv.next().getStringCellValue());
+
+                            Cell c = cv.next();
+                            if (c.getCellType()==CellType.STRING)
+                            {
+                                a.add(c.getStringCellValue());
+                            }
+
+                            else {
+                                a.add(NumberToTextConverter.toText(c.getNumericCellValue()));
+                            }
+
+
                         }
                     }
 
